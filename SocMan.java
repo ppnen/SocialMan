@@ -61,7 +61,7 @@ public class SocMan {
                 if (rs.next()) {
                     System.out.println(rs.getString("name") + "\t" +
                             rs.getLong("last_call"));
-                    return new Contact(rs.getString("name"), rs.getLong("last_call");
+                    return new Contact(rs.getString("name"), rs.getLong("last_call"));
                 }
             }
             } catch (Exception e) {
@@ -92,6 +92,8 @@ public class SocMan {
 
 
         public ArrayList<Contact> get_contacts(int n){
+
+
                 //'Get all contacts, order by first to call. If n > 0, return only first n'
 
                 String sql = "select name, last_call from Contact order by last_call, name";
@@ -102,7 +104,7 @@ public class SocMan {
 
                     ResultSet rs    = pstmt.executeQuery(sql);{
                         while (rs.next()) {
-                            contacts.add(new Contact(rs.getString("name"),rs.getLong("last_call");
+                            contacts.add(new Contact(rs.getString("name"),rs.getLong("last_call"));
                             i++;
                             if (n!=0 && i >=n){
                                 break;
@@ -119,10 +121,12 @@ public class SocMan {
 
         public Contact get_first_contact(){
         //return the contact we should call, the one we have not called for longest time
-            Contact tocall = SocMan.get_contacts(1); // List of one contact
-            return tocall[0];
+            Contact tocall = this.get_contacts(1).get(0);
+            // List of one contact
+            return tocall;
     }
-        public void test(){
+        public static void test(){
+            Date date = new Date(System.currentTimeMillis());
             String dbname= "test-contacts.db";
             File f = new File("dbname");
                             if(f.exists()) {
@@ -136,28 +140,30 @@ public class SocMan {
                             names.add("Smith,Roger");
                             names.add("Hill,Sam");
 
-                            for (name : names){
-                                cdb.add_contact(Contact.getName());
+                            for (String name : names){
+                                Contact ok=new  Contact (name,0);
+                                cdb.add_contact(ok);
                             }
 
                             System.out.println("*** DB created");
-                            for (c : cdb.get_contacts()){
+
+                            for (Contact c : cdb.get_contacts(contacts.length)){
                                 System.out.println(c.name, c.last_call_fmt());
                             }
 
-                            contact = cdb.find_contact("Smith,Roger");
-                            if (contact){
-                                cdb.contact_called(contact);
+                            Contact contact = cdb.find_contact("Smith,Roger");
+                            if (contact != null){
+                                cdb.contact_called(contact,contact.getLastCall());
                             }
-                            contact = cdb.find_contact('Putkonen,Sini');
-                            cdb.contact_called(contact, Date.getTime()/1000-3600); // called one hour ago;
-                            cdb.contact_called(cdb.find_contact('Hill,Sam'), Date.getTime()/1000-7200); // # called two hours ago
-                            cdb.contact_called(cdb.find_contact('Brown,Jackson'), Date.getTime()/1000-1800); // # called 30 minutes ago
+                            contact = cdb.find_contact("Putkonen,Sini");
+                            cdb.contact_called(contact, date.getTime()/1000-3600); // called one hour ago;
+                            cdb.contact_called(cdb.find_contact("Hill,Sam"), date.getTime()/1000-7200); // # called two hours ago
+                            cdb.contact_called(cdb.find_contact("Brown,Jackson"), date.getTime()/1000-1800); // # called 30 minutes ago
 
-                            assert (cdb.get_first_contact().name == 'Lempola,Pekka'); //  # Only we have not called must be the first
+                            assert (cdb.get_first_contact().name == "Lempola,Pekka"); //  # Only we have not called must be the first
 
                             System.out.println("*** After some calls, next call order");
-                            for (c : cdb.get_contacts()){
+                            for (Contact c : cdb.get_contacts()){
                                 System.out.println(c.name, c.last_call_fmt())
                             }
                         }
