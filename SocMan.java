@@ -104,7 +104,7 @@ public class SocMan {
 
                     ResultSet rs    = pstmt.executeQuery(sql);{
                         while (rs.next()) {
-                            contacts.add(new Contact(rs.getString("name"),rs.getLong("last_call"));
+                            contacts.add(new Contact(rs.getString("name"),rs.getLong("last_call")));
                             i++;
                             if (n!=0 && i >=n){
                                 break;
@@ -147,8 +147,8 @@ public class SocMan {
 
                             System.out.println("*** DB created");
 
-                            for (Contact c : cdb.get_contacts(contacts.length)){
-                                System.out.println(c.name, c.last_call_fmt());
+                            for (Contact c : cdb.get_contacts(4)){
+                                System.out.println(c.getName()+ c.last_call_fmt());
                             }
 
                             Contact contact = cdb.find_contact("Smith,Roger");
@@ -163,8 +163,8 @@ public class SocMan {
                             assert (cdb.get_first_contact().name == "Lempola,Pekka"); //  # Only we have not called must be the first
 
                             System.out.println("*** After some calls, next call order");
-                            for (Contact c : cdb.get_contacts()){
-                                System.out.println(c.name, c.last_call_fmt())
+                            for (Contact c : cdb.get_contacts(1)){
+                                System.out.println(c.getName()+ c.last_call_fmt());
                             }
                         }
 
